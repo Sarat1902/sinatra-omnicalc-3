@@ -138,13 +138,14 @@ end
 
 
 get("/chat") do
+  cookies["user"] = {}
+  cookies["assistant"] = {}
   erb(:chat_form)
 end
 
 post("/add_message_to_chat") do
   
   @my_message = params.fetch("user_message")
-  cookies["chat_history"].push = @my_message
   # Prepare a hash that will become the headers of the request
   request_headers_hash = {
     "Authorization" => "Bearer #{ENV.fetch("OPENAI_API_KEY")}",
@@ -175,6 +176,7 @@ post("/add_message_to_chat") do
   # Parse the response JSON into a Ruby Hash
   parsed_response = JSON.parse(raw_response)
   @parsed_hash = parsed_response.fetch("choices").at(0).fetch("message").fetch("content")
-  cookies["chat_history"].push = @parsed_hash
+  cookies["assistant"] += @parsed_hash
+  cookies["user"] += @my_message
   erb(:chat_results)
 end

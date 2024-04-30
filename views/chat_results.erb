@@ -1,15 +1,15 @@
 
-<dt>user</dt>
-<dd><%= cookies.fetch("chat_history") %><dd>
-<dt>assistant</dt>
-<dd></dd>
-
+<% if cookies["user"].is_a?(Hash) %>
+  <p>'user' cookie is a hash.</p>
+<% elsif cookies["user"].is_a?(Array) %>
+  <p>'user' cookie is an array.</p>
+<% else %>
+  <p>'user' cookie is neither a hash nor an array.</p>
+<% end %>
 
 <form action="/add_message_to_chat" method="post">
   <label for="new_message_field">You:</label>
-  
   <input id="new_message" type="text" name="user_message" placeholder="Enter a message....">
-
   <button>Send</button>
 </form>
 
